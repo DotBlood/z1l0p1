@@ -6,4 +6,4 @@
 
 ---
 
-### create "src/" and unpack [chromium](https://download-chromium.appspot.com/) in a directory
+### create "src/" and unpack [chromium](https://download-chromium.appspot.com/) in a folder :)
