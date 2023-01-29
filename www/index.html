@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Программа 221-323 </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="image/x-icon" href="./favicon/Web/favicon-32.png" rel="shortcut icon">
+    <link type="image/x-icon" href="./favicon/Web/favicon-96.png" rel="shortcut icon">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script type="text/javascript" src="eel.js"></script>
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header__wrapper">
+            <p class="header__logo">Московский политех</p>
+            <nav class="header__nav">
+                <ul>
+                    <li><a class="header--nav--link" href="https://mospolytech.ru/">Основной сайт</a></li>
+                    <li><a class="header--nav--link" href="https://lms.mospolytech.ru/">LMS</a></li>
+                    <li><a class="header--nav--link" href="https://e.mospolytech.ru/">Личный кабинет</a></li>
+                </ul>
+            </nav>
+
+            <div class="User">
+                <a href="">
+                    <img src="https://pobedarf.ru/wp-content/uploads/2020/11/sovremennyj-uchitel.jpg" alt=""
+                        class="User--Img">
+                </a>
+                <a href="" class="User--Name">Имя пользователя</a>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="main">
+        <aside class="left--block">
+
+            <div class="left--block--inner">
+                <form name="publish">
+                    <label for="money" class="main__form__label">Бюджет</label>
+                    <input class="left__block__input__form" id="money" type="number" required
+                        placeholder="Введите выделенный бюджет">
+
+                    <section class="left--block--chekbox">
+                        <p class="info">Доп. настройки</p>
+                        <label class="lb--label" for="a"><input type="checkbox" id="a" id=""> Учитывать старые
+                            показатели.</label>
+                        <label class="lb--label" for="cof--s"><input type="checkbox" id="cof--s"> Свой
+                            коэффициент за оценку.</label>
+                    </section>
+
+                    <section class="left--block--chekbox--cof--settings" hiden>
+                        <label for="cof2">2.</label>
+                        <input type="text" id="cof2" placeholder="Введите коэф. за оценку 2">
+                        <label for="cof3">3.</label>
+                        <input type="text" id="cof3" placeholder="Введите коэф. за оценку 3">
+                        <label for="cof4">4.</label>
+                        <input type="text" id="cof4" placeholder="Введите коэф. за оценку 4">
+                        <label for="cof5">5.</label>
+                        <input type="text" id="cof5" placeholder="Введите коэф. за оценку 5">
+
+                    </section>
+
+                    <button class="btn">Рассчитать</button>
+
+                </form>
+            </div>
+        </aside>
+
+        <section class="main__inner">
+            <div class="wrapper">
+                <div class="main__block">
+                    <p class="logo">Студенты</p>
+                    <div class="main__cart__styd">
+                        <div class="main__cart__block">
+
+
+
+                        </div>
+                    </div>
+                    <p class="all_stud">Студентов всего:</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="text/javascript">
+        function ShowMenu() {
+            const a = document.querySelector(".left--block--chekbox--cof--settings")
+            if (a.hasAttribute("hiden")) {
+                return a.removeAttribute('hiden', '')
+            }
+            else {
+                return a.setAttribute('hiden', '')
+            }
+        }
+        const openMenu = document.querySelector("#cof--s");
+
+        openMenu.addEventListener('click', (event) => ShowMenu())
+
+
+        if (window.outerWidth < 1200 || window.outerHeight < 800) {
+            window.resizeTo(1200, 800);
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        document.querySelector(".btn").onclick = getUserData;
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        })
+
+
+        function limitStr(str, n) {
+            if (!n) return str;
+            if (str.length < n) return str;
+            return str.substr(0, n) + '...';
+        }
+
+        async function getUserData() {
+            event.preventDefault()
+
+            let money = document.querySelector("#money").value;
+            let cof1 = document.querySelector('#cof2').value;
+            let cof2 = document.querySelector('#cof3').value;
+            let cof3 = document.querySelector('#cof4').value;
+            let cof4 = document.querySelector('#cof5').value;
+            let cof = [0, 0.75, 1, 1.35]
+
+            if (cof1, cof2, cof3, cof4) cof = [cof1, cof2, cof3, cof4]
+
+
+            if (money <= 1) {
+                return Toast.fire({
+                    icon: 'error',
+                    title: 'Ошибка, укажите сумму бюджета!'
+                })
+            }
+
+            let userData = await eel.addBlock(money, cof)();
+
+            console.log('Я тут')
+
+            for (i = 0; i < Object.keys(userData[0]).length; i++) {
+                if (i === 0) {
+                    var mainBlock = document.querySelector(".main__cart__block")
+                    let le = mainBlock.children.length
+                    for (j = 0; j < le; j++) {
+                        mainBlock.removeChild(document.querySelector(".stud__block"))
+                    }
+                    le = 0
+                }
+                add(userData[0][i])
+            }
+
+            var elem = document.getElementsByClassName("all_stud")
+            elem[0].innerHTML = `Студентов всего: ${String(Object.keys(userData[0]).length)}`
+
+
+            return Toast.fire({
+                icon: 'success',
+                title: 'Операция была успешно выполнена!'
+            })
+
+        }
+
+
+        function add(userData) {
+            var mainBlock = document.querySelector(".main__cart__block")
+
+            let pay = limitStr(String(userData.payments), 10)
+            return mainBlock.innerHTML += `
+                    <div class="stud__block"> 
+                    <img src="${userData.imgLink}">
+                    <ul>                <li>
+                                            <p>ФИО: </p>
+                                            <a href="" class="rig">${userData.username}</a>
+                                        </li>
+                                        <li>
+                                            <p>Группа: </p>
+                                            <a href="" class="rig">${userData.userGrup}</a>
+                                        </li>
+                                        <li>
+                                            <p>С. Оценка: </p>
+                                            <p class="rig">${userData.Stimate}</p>
+                                        </li>
+                                        <li>
+                                            <p>Сумма: </p>
+                                            <p class="rig">${pay}</p>
+                                            
+                                        </li>
+                                    </ul>
+                                    <a href="${userData.link}" class="cart__link">Перейти</a>
+                                    <div class="oplata ok ${userData.status}"></div>
+                    </div>`
+
+        }
+    </script>
+
+</body>
+
+</html>
